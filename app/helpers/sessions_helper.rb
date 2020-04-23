@@ -22,7 +22,7 @@ module SessionsHelper
   #セッションと@current_userを破棄
   def log_out
     forget(current_user)
-    session.delete(:user_id)
+    session.delete(:user_id) #一時的セッションを破棄
     @current_user = nil
   end 
   
@@ -41,7 +41,7 @@ module SessionsHelper
   end
   
   #渡されたユーザーがログイン済みのユーザーであればtrueを返す。
-  def current_user?
+  def current_user?(user)
     user == current_user
   end
 
@@ -50,5 +50,15 @@ module SessionsHelper
     !current_user.nil?
   end
   
+  #記憶しているURL(またはデフォルトURL)にリダイレクトする。
+  def redirect_back_or(default_utl)
+    redirect_to(session[:forwarding_url] || default_url)
+    session.delete(:forwarding_url) #一時的セッションを破棄
+  end
+  
+  #アクセスしようとしたURLを記憶する。
+  def store_locarion
+    session[:forwarding_url] = request.original_url if request.get? #GETリクエストのみを記憶
+  end
   
 end

@@ -49,6 +49,7 @@ class UsersController < ApplicationController
   
   #ログイン済みのユーザーか確認。
   def logged_in_user
+    store_locarion #getリクエスト(URL)を記憶するヘルパーメソッド。
     unless logged_in? #ヘルパーメソッド。ログイン中ユーザーがいればtrue、そうでなければfalseを返す。
       flash[:danger] = "ログインしてください。" #ログインしていないユーザーならばログイン画面にリダイレクト。
       redirect_to login_url
