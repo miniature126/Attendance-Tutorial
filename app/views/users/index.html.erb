@@ -13,6 +13,14 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= link_to user.name, user %></td>
+        <td>
+          <!--[?]を末尾に付けることで値(trueかfalse)を取得。＋ヘルパーメソッド。-->
+          <% if current_user.admin? && !current_user?(user) %>
+            <%= link_to "削除", user, method: :delete,
+                data: { confirm: "削除してよろしいですか？" },
+                class: "btn btn-danger" %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>
