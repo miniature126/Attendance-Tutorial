@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    has_many :attendances, dependent: :destroy #1対多の関係を表している。
     #remember_token という仮想の属性を作成
     attr_accessor :remember_token
     
