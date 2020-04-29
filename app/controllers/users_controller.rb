@@ -11,6 +11,8 @@ class UsersController < ApplicationController
   end
   
   def show
+    #1か月分の勤怠データから、出勤時間が入力されている日数を数える。
+    @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
   def new
