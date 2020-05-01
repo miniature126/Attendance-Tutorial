@@ -1,4 +1,3 @@
-<%# 編集画面 %>
 <% provide(:title, @user.name) %>
 <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
   <div>
@@ -16,14 +15,20 @@
       </thead>
       <tbody>
         <% @attendances.each do |day| %>
-          <tr>
-            <td><%= l(day.worked_on, format: :short) %></td>
-            <td><%= $days_of_the_week[day.worked_on.wday] %></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+          <%= f.fields_for "attendances[]", day do |attendance| %>
+            <tr>
+              <td><%= l(day.worked_on, format: :short) %></td>
+              <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+              <td><%= attendance.time_field :started_at, class: "form-control" %></td>
+              <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+              <td>
+                <% if day.started_at.present? && day.finished_at.present? %>
+                  <%= working_times(day.started_at, day.finished_at) %>
+                <% end %>
+              </td>
+              <td><%= attendance.text_field :note, class: "form-control" %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
