@@ -69,30 +69,4 @@ class UsersController < ApplicationController
   def basic_info_params
     params.require(:user).permit(:department, :basic_time, :work_time)
   end
-  
-  #beforeフィルター
-  
-  #paramsハッシュからユーザーを取得。
-  def set_user
-    @user = User.find(params[:id])
-  end
-  
-  #ログイン済みのユーザーか確認。
-  def logged_in_user
-    unless logged_in? #ヘルパーメソッド。ログイン中ユーザーがいればtrue、そうでなければfalseを返す。
-      store_locarion #getリクエスト(URL)を記憶するヘルパーメソッド。
-      flash[:danger] = "ログインしてください。" #ログインしていないユーザーならばログイン画面にリダイレクト。
-      redirect_to login_url
-    end
-  end
-  
-  #アクセスしたユーザーが現在ログインしているユーザーか確認。
-  def correct_user
-    redirect_to(root_url) unless current_user?(@user) #ヘルパーメソッド。ログイン済みのユーザーでなければTOPへリダイレクト。
-  end
-  
-  #システム管理者権限所有かどうか判定。
-  def admin_user
-    redirect_to root_url unless current_user.admin?
-  end
 end
